@@ -7,6 +7,7 @@ const { isUserLogin, getUserDataById } = require("./auth")
  * @param {express.Request} req 
  * @param {express.Response} res
  * @param {express.NextFunction} next
+ * @returns {express.RequestHandler}
  */
 const validateRequest = (req, res, next) => {
     let validate = validationResult(req)

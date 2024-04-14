@@ -1,4 +1,5 @@
 const { product } = require("../DB/schemas/products");
+const { deleteProductComments } = require("./commentManager");
 const obj = product.schema.obj
 
 
@@ -49,10 +50,35 @@ const addProduct = async (name, price, categories, imagePath, type) => {
 /**
  * 
  * @param {import("mongoose").ObjectId} id 
+ * @param {String} name 
+ * @param {Number} price 
+ * @param {Array} categories 
+ * @param {Number} type
+ * @returns {Promise<Boolean>} 
+ */
+const editProduct = async (id, name, price, categories, type) => {
+    const updated = await product.updateOne({_id: id}, {name, price, categories, type})
+    return updated.modifiedCount == 1
+}
+/**
+ * 
+ * @param {import("mongoose").ObjectId} id 
+ * @param {String} imagePath
+ * @returns {Promise<Boolean>} 
+ */
+const editProductImagePath = async (id, imagePath) => {
+    const updated = await product.updateOne({_id: id}, {imagePath})
+    return updated.modifiedCount == 1
+}
+
+/**
+ * 
+ * @param {import("mongoose").ObjectId} id 
  * @returns {Promise<Boolean>}
  */
 const deleteProduct = async (id) => {
     const deleted = await product.deleteOne({_id: id})
+    deleteProductComments(id)
     return deleted.deletedCount == 1
 }
 
@@ -62,6 +88,8 @@ module.exports = {
     getProducts,
     getProductById,
     editProductPrice,
+    editProduct,
+    editProductImagePath,
     addProduct,
     deleteProduct
 }

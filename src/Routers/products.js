@@ -1,10 +1,11 @@
 const Router = require("express").Router()
-const {getProducts, addProduct} = require("../Utils/productsManager")
+const {getProducts, addProduct, editProduct, getProductById, editProductImagePath, deleteProduct} = require("../Utils/productsManager")
 const {body} = require("express-validator")
 const path = require("path")
 const multer = require('multer');
 const mkdirp = require('mkdirp');
 const { validateRequest, isUserAdmin } = require("../Utils/validator");
+const { unlinkSync } = require("fs");
 
 
 const diskStorage = multer.diskStorage({
@@ -42,13 +43,41 @@ Router.get("/", async (req, res) => {
     res.json(await getProducts(req.query.page))
 })
 
-Router.post("/", process.Session, upload.single("image"), (req, res, next) => {
+Router.post("/", process.Session, isUserAdmin, upload.single("image"), (req, res, next) => {
     req.body = JSON.parse(req.body.data);
     next()
-}, isUserAdmin, validate, validateRequest, async (req, res) => {
+}, validate, validateRequest, async (req, res) => {
     const {name, price, categories, type} = req.body
     await addProduct(name, price, categories, `/images/products/${req.imagePath}`, type)
     res.json({success: true})
+})
+
+Router.put("/:id", process.Session, isUserAdmin, validate, validateRequest, async (req, res) => {
+    const {name, price, categories, type} = req.body
+    const id = req.params.id
+    const edited = await editProduct(id, name, price, categories, type)
+    res.json({success: edited})
+})
+
+Router.put("/:id/image", process.Session, isUserAdmin, async (req, res, next) => {
+    if (!req.file && !req.files) return res.status(400).json({success: false, error: "image not found"})
+    const product = await getProductById(req.params.id)
+    if (!product) return res.status(404).json({success: false, error: "Product not found"})
+    unlinkSync(path.join(process.cwd(), `/images/products/${product.imagePath}`))
+    next()
+}, upload.single("image"), async (req, res) => {
+    const id = req.params.id
+    const edited = await editProductImagePath(id, `/images/products/${req.imagePath}`)
+    res.json({success: edited})
+})
+
+Router.delete("/:id", process.Session, isUserAdmin, async (req, res) => {
+    const id = req.params.id
+    const product = await getProductById(id)
+    if (!product) return res.status(404).json({success: false, error: "Product not found"})
+    unlinkSync(path.join(process.cwd(), `/images/products/${product.imagePath}`))
+    const deleted = await deleteProduct(id)
+    res.json({success: deleted})
 })
 
 module.exports = {
