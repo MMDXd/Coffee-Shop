@@ -5,9 +5,15 @@ const session = require("express-session")
 const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
 const { LoadRouters } = require("./src/Utils/routerApiLoader");
-
+const cors = require("cors");
 // Middlewares
 app.use(express.json())
+app.use(cors({
+    credentials: true,
+    origin: function (req, callback) {
+        callback(null, { origin: true })
+    }      
+}));
 app.use(express.urlencoded({extended: true}))
 app.use("/images", express.static(path.join(__dirname, "/images")))
 
