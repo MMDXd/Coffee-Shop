@@ -40,10 +40,11 @@ const editProductPrice = async (id, price) => {
  * @param {Array} categories 
  * @param {String} imagePath 
  * @param {Number} type
+ * @param {Number} weight
  * @returns {Promise<void>} 
  */
-const addProduct = async (name, price, categories, imagePath, type) => {
-    const newProduct = new product({name, price, categories, imagePath, type})
+const addProduct = async (name, price, categories, imagePath, type, weight) => {
+    const newProduct = new product({name, price, categories, imagePath, type, weight})
     await newProduct.save()
 }
 
@@ -54,10 +55,11 @@ const addProduct = async (name, price, categories, imagePath, type) => {
  * @param {Number} price 
  * @param {Array} categories 
  * @param {Number} type
+ * @param {Number} weight
  * @returns {Promise<Boolean>} 
  */
-const editProduct = async (id, name, price, categories, type) => {
-    const updated = await product.updateOne({_id: id}, {name, price, categories, type})
+const editProduct = async (id, name, price, categories, type, weight) => {
+    const updated = await product.updateOne({_id: id}, {name, price, categories, type, weight})
     return updated.modifiedCount == 1
 }
 /**

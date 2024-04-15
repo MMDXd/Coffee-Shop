@@ -33,7 +33,8 @@ const validate = [
     body("name").isString().notEmpty(),
     body("price").isInt(),
     body("categories").isArray().notEmpty(),
-    body("type").isInt()
+    body("type").isInt(),
+    body("weight").isInt(),
 ]
 
 
@@ -47,15 +48,15 @@ Router.post("/", process.Session, isUserAdmin, upload.single("image"), (req, res
     req.body = JSON.parse(req.body.data);
     next()
 }, validate, validateRequest, async (req, res) => {
-    const {name, price, categories, type} = req.body
-    await addProduct(name, price, categories, `/images/products/${req.imagePath}`, type)
+    const {name, price, categories, type, weight} = req.body
+    await addProduct(name, price, categories, `/images/products/${req.imagePath}`, type, weight)
     res.json({success: true})
 })
 
 Router.put("/:id", process.Session, isUserAdmin, validate, validateRequest, async (req, res) => {
     const {name, price, categories, type} = req.body
     const id = req.params.id
-    const edited = await editProduct(id, name, price, categories, type)
+    const edited = await editProduct(id, name, price, categories, type, weight)
     res.json({success: edited})
 })
 
