@@ -72,7 +72,8 @@ const getUserDataByEmail = async (email) => {
  * @returns {Promise<{valid: Boolean, user: object}>} valid
  */
 const getUserDataById = async (id) => {
-    const user = await User.findById(id)
+    console.log(id);
+    const user = await User.findOne({_id: id})
     
     if (!user) return {valid: false}
 
