@@ -22,8 +22,8 @@ const validate = [
 ]
 
 Router.post("/", validate, validateRequest, async (req, res) => {
-    const {name, type, tag} = req.body
-    await addCategory(name, tag, type)
+    const {name, filter, tag} = req.body
+    await addCategory(name, tag, filter)
     res.json({success: true})
 })
 

@@ -2,7 +2,7 @@ const {Schema, models, model} = require("mongoose")
 
 const categorySchema = new Schema({
     name: String,
-    type: Number,
+    filter: String,
     tag: String
 })
 

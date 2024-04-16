@@ -5,7 +5,7 @@ const productSchema = new Schema({
     price: Number,
     categories: Array,
     imagePath: String,
-    type: Number,
+    filter: String,
 })
 
 const product = models.product || model("product", productSchema)

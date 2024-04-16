@@ -10,11 +10,11 @@ const getCategories = async () => {
 
 /**
  * 
- * @param {Number} type 
+ * @param {Number} filter 
  * @returns {Promise<Array>}
  */
-const getCategoriesByType = async (type) => {
-    return await category.find({type})
+const getCategoriesByFilter = async (filter) => {
+    return await category.find({filter})
 }
 
 /**
@@ -30,11 +30,11 @@ const getCategoryData = async (id) => {
  * 
  * @param {String} name 
  * @param {String} tag 
- * @param {Number} type 
+ * @param {Number} filter 
  * @returns {Promise<void>}
  */
-const addCategory = async (name, tag, type) => {
-    const newCategory = new category({name, tag, type})
+const addCategory = async (name, tag, filter) => {
+    const newCategory = new category({name, tag, filter})
     await newCategory.save()
 }
 
@@ -50,7 +50,7 @@ const deleteCategory = async (id) => {
 
 module.exports = {
     getCategories,
-    getCategoriesByType,
+    getCategoriesByFilter,
     getCategoryData,
     addCategory,
     deleteCategory
