@@ -41,6 +41,7 @@ Router.get("/", async (req, res) => {
 })
 
 Router.post("/", process.Session, isUserAdmin, upload.single("image"), (req, res, next) => {
+    console.log(req.body);
     req.body = JSON.parse(req.body.data);
     next()
 }, validate, validateRequest, async (req, res) => {
