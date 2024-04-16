@@ -34,10 +34,9 @@ Router.use(process.Session)
 
 Router.get("/mydata", checkIfUserLogin, async (req, res) => {
     const user = await isUserLogin(req)
-    const userdata = await getUserDataById(user._id)
-    userdata.user.password = undefined
-    userdata.user.salt = undefined
-    return res.json({login: true, userdata: userdata.user})
+    user.password = undefined
+    user.salt = undefined
+    return res.json({login: true, userdata: user})
 })
 
 Router.get("/getUsers", isUserAdmin, async (req, res) => {

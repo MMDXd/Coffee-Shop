@@ -6,10 +6,9 @@ const {ObjectId} = require("mongoose").SchemaTypes
 /**
  * 
  * @param {import("express").Request} req 
- * @returns {Promise<Boolean>} isLogin
  */
 const isUserLogin = async (req) => {
-    return (req.session.isLogin && (await User.findById(req.session.user._id)) && true) || false
+    return (req.session.isLogin && (await User.findById(req.session.user._id))) || false
 }
 
 /**
