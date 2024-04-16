@@ -1,5 +1,5 @@
 const { User } = require("../DB/schemas/userSchema")
-const { getUserDataById, checkUserPassword, deleteUser, setUserAdmin, removeAdminPerm } = require("../Utils/auth")
+const { getUserDataById, checkUserPassword, deleteUser, setUserAdmin, removeAdminPerm, isUserLogin } = require("../Utils/auth")
 const multer = require("multer")
 const Router = require("express").Router()
 const {unlinkSync} = require("fs")
@@ -33,7 +33,8 @@ Router.get("/:id", async (req, res) => {
 Router.use(process.Session)
 
 Router.get("/mydata", checkIfUserLogin, async (req, res) => {
-    const userdata = await getUserDataById(req.session.user._id.toString())
+    const user = await isUserLogin(req)
+    const userdata = await getUserDataById(user._id)
     userdata.user.password = undefined
     userdata.user.salt = undefined
     return res.json({login: true, userdata: userdata.user})
