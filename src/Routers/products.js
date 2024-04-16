@@ -14,10 +14,7 @@ const diskStorage = multer.diskStorage({
 
         const dest = path.join(process.cwd(),'/images/products');
 
-        mkdirp(dest,function(err){
-            if(err) cb(err,dest);
-            else cb(null,dest);
-        });
+        cb(null,dest);
     },
     filename:function(req,file,cb){
         const ext = path.extname(file.originalname);
