@@ -33,7 +33,7 @@ Router.get("/:id", async (req, res) => {
 Router.use(process.Session)
 
 Router.get("/mydata", checkIfUserLogin, async (req, res) => {
-    const userdata = await getUserDataById(req.session.user._id)
+    const userdata = await getUserDataById(req.session.user._id.toString())
     userdata.user.password = undefined
     userdata.user.salt = undefined
     return res.json({login: true, userdata: userdata.user})
