@@ -1,5 +1,5 @@
 const { User } = require("../DB/schemas/userSchema")
-const { getUserDataById, checkUserPassword, deleteUser, setUserAdmin, removeAdminPerm, isUserLogin } = require("../Utils/auth")
+const { getUserDataById, checkUserPassword, deleteUser, setUserAdmin, removeAdminPerm } = require("../Utils/auth")
 const multer = require("multer")
 const Router = require("express").Router()
 const {unlinkSync} = require("fs")
@@ -22,21 +22,24 @@ const storage = multer.diskStorage({
 const userImages = multer({storage})
 
 
+
+
+Router.use(process.Session)
+
+Router.get("/mydata", checkIfUserLogin, async (req, res) => {
+    const userdata = await getUserDataById(req.session.user._id)
+    userdata.user.password = undefined
+    userdata.user.salt = undefined
+    return res.json({login: true, userdata: userdata.user})
+})
+
+
 Router.get("/:id", async (req, res) => {
     const userdata = await getUserDataById(req.params.id)
     userdata.user.password = undefined
     userdata.user.salt = undefined
     userdata.user.email = undefined
     return res.json(userdata.user)
-})
-
-Router.use(process.Session)
-
-Router.get("/mydata", checkIfUserLogin, async (req, res) => {
-    const user = await isUserLogin(req)
-    user.password = undefined
-    user.salt = undefined
-    return res.json({login: true, userdata: user})
 })
 
 Router.get("/getUsers", isUserAdmin, async (req, res) => {

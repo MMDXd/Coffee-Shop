@@ -6,9 +6,10 @@ const {ObjectId} = require("mongoose").SchemaTypes
 /**
  * 
  * @param {import("express").Request} req 
+ * @returns {Promise<Boolean>} isLogin
  */
 const isUserLogin = async (req) => {
-    return (req.session.isLogin && (await User.findById(req.session.user._id))) || false
+    return (req.session.isLogin && (await User.findById(req.session.user._id)) && true) || false
 }
 
 /**
@@ -71,8 +72,7 @@ const getUserDataByEmail = async (email) => {
  * @returns {Promise<{valid: Boolean, user: object}>} valid
  */
 const getUserDataById = async (id) => {
-    console.log(id);
-    const user = await User.findOne({_id: id})
+    const user = await User.findById(id)
     
     if (!user) return {valid: false}
 
