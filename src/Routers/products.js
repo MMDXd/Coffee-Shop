@@ -32,7 +32,7 @@ const upload = multer({storage:diskStorage});
 const validate = [
     body("name").isString().notEmpty(),
     body("price").isInt(),
-    body("categories").isArray().notEmpty(),
+    body("categories").isArray(),
     body("type").isInt(),
     body("weight").isInt(),
 ]
@@ -41,7 +41,7 @@ const validate = [
 // Routes
 
 Router.get("/", async (req, res) => {
-    res.json(await getProducts(req.query.page))
+    res.json(await getProducts())
 })
 
 Router.post("/", process.Session, isUserAdmin, upload.single("image"), (req, res, next) => {

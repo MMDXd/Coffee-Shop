@@ -5,12 +5,10 @@ const obj = product.schema.obj
 
 /**
  * 
- * @param {Number?} page
- * @description every page = 10x product
  * @returns {Promise<Array<obj>>}
  */
-const getProducts = async (page = 1) => {
-    return await product.find().skip((page-1) * 10).limit(10)
+const getProducts = async () => {
+    return await product.find()
 }
 
 /**
