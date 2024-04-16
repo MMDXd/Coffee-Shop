@@ -23,7 +23,12 @@ require("./src/DB")
 // session
 const Session = process.Session = session({
     secret: "Yummy",
-    cookie: {maxAge: (24 * (60 * (60 * 1000)))},
+    proxy: true,
+    cookie: {
+        maxAge: (24 * (60 * (60 * 1000))),
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "none"
+    },
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
