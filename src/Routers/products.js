@@ -40,11 +40,7 @@ Router.get("/", async (req, res) => {
     res.json(await getProducts())
 })
 
-Router.post("/", process.Session, isUserAdmin, upload.single("image"), (req, res, next) => {
-    console.log(req.body);
-    req.body = JSON.parse(req.body.data);
-    next()
-}, validate, validateRequest, async (req, res) => {
+Router.post("/", process.Session, isUserAdmin, upload.single("image"), validate, validateRequest, async (req, res) => {
     const {name, price, categories, filter, weight} = req.body
     await addProduct(name, price, categories, `/images/products/${req.imagePath}`, filter, weight)
     res.json({success: true})
