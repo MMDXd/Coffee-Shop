@@ -27,7 +27,7 @@ const userImages = multer({storage})
 Router.use(process.Session)
 
 Router.get("/mydata", checkIfUserLogin, async (req, res) => {
-    const userdata = await getUserDataById(req.session.user._id)
+    const userdata = await getUserDataById(req.session._id)
     userdata.user.password = undefined
     userdata.user.salt = undefined
     return res.json({login: true, userdata: userdata.user})
@@ -56,7 +56,7 @@ Router.delete("/:id", isUserAdmin, async (req, res) => {
 
 Router.post("/mydata", userImages.single("image"), checkIfUserLogin, async (req, res) => {
     if (!req.body.email || !req.body.fullname) return res.status(400).json({message: "Invalid value"})
-    const id = req.session.user._id
+    const id = req.session._id
     const {user} = await getUserDataById(id)
     req.body.profileURL = user.profileURLPath
     if (req.file) {
@@ -77,7 +77,7 @@ Router.put("/mydata/password", [
     body("currentpassword").isString().notEmpty(),
     body("password").isString().notEmpty(),
 ], validateRequest, checkIfUserLogin, async (req, res) => {
-    const id = req.session.user._id
+    const id = req.session._id
     const {user} = await getUserDataById(id)
     const {currentpassword, password} = req.body
     if ((await checkUserPassword(user.email, currentpassword)).valid) {

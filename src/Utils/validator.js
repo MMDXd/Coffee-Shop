@@ -42,7 +42,7 @@ const isUserAdmin = async (req, res, next) => {
     if (!await isUserLogin(req)) {
         return res.status(401).json({login: false, success: false})
     }
-    const { user } = await getUserDataById(req.session.user._id)
+    const { user } = await getUserDataById(req.session._id)
     if (!user.isAdmin) {
         return res.status(403).json({login: true, admin: false})
     }

@@ -19,7 +19,7 @@ const validator = [
 
 Router.post("/product/:id", validator, validateRequest, async (req, res, next) => {
     const {title, description, stars} = req.body
-    const comment = await createComment(req.params.id, req.session.user._id, title, description, stars)
+    const comment = await createComment(req.params.id, req.session._id, title, description, stars)
     if (!comment.success) {
         res.status(400).json(comment)
     }

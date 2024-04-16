@@ -9,7 +9,7 @@ const {ObjectId} = require("mongoose").SchemaTypes
  * @returns {Promise<Boolean>} isLogin
  */
 const isUserLogin = async (req) => {
-    return (req.session.isLogin && (await User.findById(req.session.user._id)) && true) || false
+    return (req.session._id && (await User.findById(req.session._id)) && true) || false
 }
 
 /**
@@ -21,8 +21,7 @@ const isUserLogin = async (req) => {
 const setUserLogin = async (req, _id) => {
     const user = await User.findById(_id)
     if (!user) return false
-    req.session.isLogin = true
-    req.session.user = {_id: user._id}
+    req.session._id = user._id
     await req.session.resetMaxAge()
     await req.session.save()
     return true
@@ -33,8 +32,7 @@ const setUserLogin = async (req, _id) => {
  * @param {import("express").Request} req 
  */
 const setUserLogout = (req) => {
-    req.session.isLogin = false
-    delete req.session.user
+    req.session._id = undefined
     req.session.save()
 }
 
